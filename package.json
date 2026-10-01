@@ -1,0 +1,57 @@
+{
+  "name": "fakegreen",
+  "version": "0.1.0",
+  "description": "One command scans your agent's diff and flags every way it faked a green build. Deterministic, zero-LLM, no API key.",
+  "keywords": [
+    "ai",
+    "agents",
+    "claude-code",
+    "codex",
+    "cursor",
+    "gemini-cli",
+    "aider",
+    "tests",
+    "ci",
+    "linter",
+    "git-diff",
+    "reward-hacking",
+    "hooks"
+  ],
+  "license": "MIT",
+  "author": "Joshua Almeida",
+  "homepage": "https://github.com/fitzyracing1/fakegreen#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fitzyracing1/fakegreen.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fitzyracing1/fakegreen/issues"
+  },
+  "type": "commonjs",
+  "bin": {
+    "fakegreen": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "skills",
+    "action.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/clean.js dist && tsc -p tsconfig.json && node scripts/chmod-bin.js",
+    "build:test": "node scripts/clean.js build-test && tsc -p tsconfig.test.json",
+    "test": "npm run build && npm run build:test && node --test build-test/test/",
+    "typecheck": "tsc -p tsconfig.test.json --noEmit",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.0",
+    "typescript": "^5.4.0"
+  }
+}

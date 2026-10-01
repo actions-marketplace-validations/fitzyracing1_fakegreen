@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "coverage-exclusion-added": "off",
+    "suppression-added": "low",
+    "error-swallowed": "high"
+  },
+  "ignore": ["scripts/**", "**/generated/**"],
+  "testPatterns": ["e2e/**/*.ts"],
+  "failOn": "high",
+  "untracked": true
+}

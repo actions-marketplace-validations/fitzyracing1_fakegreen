@@ -1,0 +1,43 @@
+name: fakegreen
+description: Flag every way an AI coding agent faked a green build in a pull request (skipped/deleted tests, weakened assertions, suppressions, neutered CI).
+author: Joshua Almeida
+branding:
+  icon: alert-triangle
+  color: green
+
+inputs:
+  version:
+    description: fakegreen version to run from npm (e.g. 0.1.0). Defaults to latest.
+    required: false
+    default: latest
+  base:
+    description: Base ref to diff against. Defaults to origin/<PR base branch>, or HEAD~1 outside pull requests.
+    required: false
+    default: ''
+  fail-on:
+    description: Minimum severity that fails the step (high, medium, low, none).
+    required: false
+    default: high
+  args:
+    description: Extra arguments passed to fakegreen.
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Run fakegreen
+      shell: bash
+      env:
+        FG_VERSION: ${{ inputs.version }}
+        FG_BASE: ${{ inputs.base }}
+        FG_FAIL_ON: ${{ inputs.fail-on }}
+        FG_ARGS: ${{ inputs.args }}
+        FG_PR_BASE: ${{ github.base_ref }}
+      run: |
+        base="$FG_BASE"
+        if [ -z "$base" ]; then
+          if [ -n "$FG_PR_BASE" ]; then base="origin/$FG_PR_BASE"; else base="HEAD~1"; fi
+        fi
+        # shellcheck disable=SC2086
+        npx --yes "fakegreen@${FG_VERSION}" --base "$base" --fail-on "$FG_FAIL_ON" --format github $FG_ARGS

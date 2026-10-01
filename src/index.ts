@@ -1,0 +1,10 @@
+export { analyzeDiffs, analyzeDiffText, meetsThreshold } from './analyze';
+export type { ScanResult, ScanStats } from './analyze';
+export { loadConfig, resolveConfig } from './config';
+export type { UserConfig, ResolvedConfig } from './config';
+export { parseDiff } from './diff';
+export { getDiff } from './git';
+export type { DiffMode } from './git';
+export { runHook, blockResponse, detectAgent } from './hook';
+export { RULES } from './rules/registry';
+export type { Finding, Severity, FileDiff } from './types';

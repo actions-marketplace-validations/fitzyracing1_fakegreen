@@ -1,0 +1,8 @@
+- id: fakegreen
+  name: fakegreen
+  description: Flag staged changes that fake a green build (skipped/deleted tests, weakened assertions, suppressions, neutered CI).
+  entry: fakegreen --staged
+  language: node
+  pass_filenames: false
+  always_run: true
+  stages: [pre-commit]

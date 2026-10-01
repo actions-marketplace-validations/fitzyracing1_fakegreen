@@ -1,0 +1,33 @@
+# Copy to .github/workflows/fakegreen.yml (or run `npx fakegreen install github-action`).
+name: fakegreen
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  fakegreen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # fakegreen needs the base branch history to compute the merge-base
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Option A: the composite action
+      - uses: fitzyracing1/fakegreen@v0.1.0
+        with:
+          fail-on: high
+
+      # Option B: plain npx (equivalent)
+      # - run: npx --yes fakegreen --base "origin/${{ github.base_ref }}" --format github
+
+      # Option C: also upload SARIF to GitHub code scanning (needs `security-events: write`)
+      # - run: npx --yes fakegreen --base "origin/${{ github.base_ref }}" --sarif --fail-on none > fakegreen.sarif
+      # - uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: fakegreen.sarif
