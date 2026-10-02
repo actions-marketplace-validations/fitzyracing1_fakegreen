@@ -15,7 +15,17 @@
     "linter",
     "git-diff",
     "reward-hacking",
-    "hooks"
+    "hooks",
+    "ai-agents",
+    "testing",
+    "test",
+    "github-actions",
+    "pre-commit",
+    "sarif",
+    "static-analysis",
+    "code-quality",
+    "code-review",
+    "llm"
   ],
   "license": "MIT",
   "author": "Joshua Almeida",

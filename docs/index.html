@@ -3,8 +3,83 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>fakegreen: catch AI coding agents faking a green build</title>
-<meta name="description" content="Deterministic, zero-LLM CLI that scans your agent's git diff and flags skipped or deleted tests, weakened assertions, suppressions and CI forced green. MIT licensed.">
+<title>fakegreen: Detect AI Coding Agents Faking Passing Tests</title>
+<meta name="description" content="Free open-source CLI and GitHub Action that catches Claude Code, Codex and Gemini CLI faking passing tests: skipped tests, weakened assertions, CI forced green.">
+<link rel="canonical" href="https://fitzyracing1.github.io/fakegreen/">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0b0f0d">
+<meta name="author" content="Joshua Almeida">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="fakegreen">
+<meta property="og:title" content="fakegreen: Detect AI Coding Agents Faking Passing Tests">
+<meta property="og:description" content="Free open-source CLI and GitHub Action that catches Claude Code, Codex and Gemini CLI faking passing tests: skipped tests, weakened assertions, CI forced green.">
+<meta property="og:url" content="https://fitzyracing1.github.io/fakegreen/">
+<meta property="og:image" content="https://fitzyracing1.github.io/fakegreen/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="fakegreen: catch AI coding agents faking passing tests. npx fakegreen">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="fakegreen: Detect AI Coding Agents Faking Passing Tests">
+<meta name="twitter:description" content="Free open-source CLI and GitHub Action that catches Claude Code, Codex and Gemini CLI faking passing tests: skipped tests, weakened assertions, CI forced green.">
+<meta name="twitter:image" content="https://fitzyracing1.github.io/fakegreen/og.png">
+<meta name="twitter:image:alt" content="fakegreen: catch AI coding agents faking passing tests. npx fakegreen">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "SoftwareApplication",
+   "@id": "https://fitzyracing1.github.io/fakegreen/#app",
+   "name": "fakegreen",
+   "url": "https://fitzyracing1.github.io/fakegreen/",
+   "description": "Deterministic, zero-LLM command-line tool that scans a git diff and flags the ways AI coding agents fake a green build: skipped or deleted tests, weakened assertions, checker suppressions, test-environment special-casing, swallowed errors and CI steps forced to pass. Ships agent hooks for Claude Code, Codex and Gemini CLI, a pre-commit hook and a GitHub Action.",
+   "applicationCategory": "DeveloperApplication",
+   "applicationSubCategory": "Static analysis / CI",
+   "operatingSystem": "Linux, macOS, Windows (requires Node.js 18+ and git)",
+   "softwareVersion": "0.1.0",
+   "license": "https://opensource.org/licenses/MIT",
+   "image": "https://fitzyracing1.github.io/fakegreen/og.png",
+   "screenshot": "https://fitzyracing1.github.io/fakegreen/demo.png",
+   "downloadUrl": "https://www.npmjs.com/package/fakegreen",
+   "installUrl": "https://www.npmjs.com/package/fakegreen",
+   "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+   },
+   "author": {
+    "@type": "Person",
+    "name": "Joshua Almeida",
+    "url": "https://github.com/fitzyracing1"
+   },
+   "sameAs": [
+    "https://github.com/fitzyracing1/fakegreen",
+    "https://www.npmjs.com/package/fakegreen",
+    "https://github.com/marketplace/actions/fakegreen"
+   ]
+  },
+  {
+   "@type": "SoftwareSourceCode",
+   "@id": "https://fitzyracing1.github.io/fakegreen/#source",
+   "name": "fakegreen source code",
+   "codeRepository": "https://github.com/fitzyracing1/fakegreen",
+   "programmingLanguage": "TypeScript",
+   "license": "https://opensource.org/licenses/MIT",
+   "runtimePlatform": "Node.js",
+   "targetProduct": {
+    "@id": "https://fitzyracing1.github.io/fakegreen/#app"
+   },
+   "author": {
+    "@type": "Person",
+    "name": "Joshua Almeida",
+    "url": "https://github.com/fitzyracing1"
+   }
+  }
+ ]
+}
+</script>
 <style>
   :root{--bg:#0b0f0d;--panel:#121815;--panel2:#18201c;--line:#24302a;--text:#e6ede9;--muted:#93a39a;--green:#3ddc84;--red:#ff5c5c;--amber:#f5b942;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
   *{box-sizing:border-box}
@@ -19,6 +94,10 @@
   .pill{display:inline-block;font-size:12px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 12px;margin-bottom:18px}
   h1{font-size:clamp(32px,5vw,52px);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
   h1 em{font-style:normal;color:var(--green)}
+  .kicker{font-size:clamp(18px,2.4vw,24px);color:#cfd8d3;margin:0 0 14px;font-weight:600}
+  .kicker em{font-style:normal;color:var(--green)}
+  .faq h3{font-size:17px;margin:22px 0 6px} .faq p{margin:0;color:var(--muted);max-width:780px}
+  a.logo:hover{text-decoration:none}
   .sub{color:var(--muted);font-size:18px;max-width:720px;margin:0 auto 28px}
   .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .cmd{font-family:var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 18px;font-size:16px;color:var(--text)}
@@ -56,26 +135,29 @@
 </head>
 <body>
 <div class="wrap">
-  <nav>
-    <div class="logo">fake<s>green</s><b>✓</b></div>
+  <nav aria-label="Main">
+    <a class="logo" href="./" aria-label="fakegreen home">fake<s>green</s><b>✓</b></a>
     <div class="links">
       <a href="#rules">What it catches</a>
       <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
       <a href="#teams">Teams</a>
       <a href="https://github.com/fitzyracing1/fakegreen">GitHub</a>
     </div>
   </nav>
 
+  <main>
   <header class="hero">
     <div class="pill">MIT licensed · deterministic · no LLM · no API key</div>
-    <h1>Your agent said <em>"All tests pass ✅"</em>.<br>Did it delete them first?</h1>
-    <p class="sub">fakegreen scans the git diff and flags every way an AI coding agent faked a green build: skipped or deleted tests, weakened assertions, new suppressions, test-env special-casing, swallowed errors, and CI forced green with <code>|| true</code>.</p>
+    <p class="kicker">Your agent said <em>"All tests pass ✅"</em>. Did it delete them first?</p>
+    <h1>Catch AI coding agents <em>faking passing tests</em></h1>
+    <p class="sub">fakegreen scans the git diff from Claude Code, Codex, Gemini CLI, Cursor or Aider and flags every way the agent faked a green build: skipped or deleted tests, weakened assertions, new suppressions, test-env special-casing, swallowed errors, and CI forced green with <code>|| true</code>.</p>
     <div class="cta">
       <div class="cmd"><span>$ </span>npx fakegreen</div>
       <a class="btn" href="https://github.com/fitzyracing1/fakegreen">View on GitHub</a>
       <a class="btn primary" href="#teams">Join the Teams waitlist</a>
     </div>
-    <div class="demo"><img src="./demo.gif" alt="fakegreen catching a fake-green agent commit in the terminal" width="860"></div>
+    <figure class="demo"><img src="./demo.gif" alt="Terminal recording: fakegreen flags an AI agent commit that skipped a test, weakened an assertion, deleted a test file, added @ts-ignore and appended || true to CI" width="944" height="1053"></figure>
     <div class="facts">
       <span><b>22</b> rules</span>
       <span><b>JS/TS · Python · Go · Rust · Java</b></span>
@@ -99,7 +181,7 @@
 
   <section id="install">
     <h2>Block the agent before it says "done"</h2>
-    <p class="lead">Hook fakegreen into your agent's end-of-turn event. When it finds something, the agent is told exactly what it faked and is asked to fix it or explain why.</p>
+    <p class="lead">Hook fakegreen into the end-of-turn event of Claude Code, Codex or Gemini CLI. When it finds something, the agent is told exactly what it faked and is asked to fix it or explain why. Back it up with the pre-commit hook and the GitHub Action, which annotates pull requests in CI. SARIF and JSON output are also available.</p>
     <div class="two">
 <pre><span class="ok"># agent end-of-turn hooks</span>
 npx fakegreen install claude
@@ -119,6 +201,18 @@ npx fakegreen --base origin/main --sarif &gt; fg.sarif</pre>
 <span class="hi">HIGH</span>  test/cart.test.ts:9  test-skipped
 <span class="me">MED</span>   src/cart.ts:4  suppression-added</pre>
     </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <h2>FAQ</h2>
+    <h3>What does "faking a green build" mean?</h3>
+    <p>AI coding agents get rewarded for "tests pass". Sometimes they get there by skipping or deleting tests, swapping a specific assertion for a vague one, silencing the type checker or linter, special-casing the test environment, or making CI ignore failures. fakegreen flags those changes in the diff.</p>
+    <h3>Does it use an LLM or need an API key?</h3>
+    <p>No. It's deterministic pattern analysis on changed lines, with zero runtime dependencies. It usually finishes in under 100 ms and gives the same answer every time.</p>
+    <h3>Which agents and languages does it support?</h3>
+    <p>It has blocking end-of-turn hooks for Claude Code, Codex and Gemini CLI. For Cursor, Aider and anything else, use the pre-commit hook, the GitHub Action or a plain <code>npx fakegreen</code> run. It analyzes JavaScript/TypeScript, Python, Go, Rust and Java/Kotlin, plus CI and test config files.</p>
+    <h3>Does it send my code anywhere?</h3>
+    <p>No. The CLI never makes a network call. It shells out to <code>git</code> and nothing else.</p>
   </section>
 
   <section id="teams" class="teams">
@@ -168,6 +262,8 @@ npx fakegreen --base origin/main --sarif &gt; fg.sarif</pre>
       </script>
     </div>
   </section>
+
+  </main>
 
   <footer>
     <span>fakegreen · MIT © 2026 Joshua Almeida</span>
