@@ -272,7 +272,7 @@ npx fakegreen install skill          # copies SKILL.md to .claude/skills/fakegre
 ```yaml
 - uses: actions/checkout@v4
   with: { fetch-depth: 0 }
-- uses: fitzyracing1/fakegreen@v0.1.0   # composite action; inputs: version, base, fail-on, args
+- uses: fitzyracing1/fakegreen@v0.1.1   # composite action; inputs: version, base, fail-on, args
   with:
     fail-on: high
 ```

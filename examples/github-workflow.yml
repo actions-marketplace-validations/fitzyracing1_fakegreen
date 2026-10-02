@@ -19,7 +19,7 @@ jobs:
           node-version: 20
 
       # Option A: the composite action
-      - uses: fitzyracing1/fakegreen@v0.1.0
+      - uses: fitzyracing1/fakegreen@v0.1.1
         with:
           fail-on: high
 
