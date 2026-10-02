@@ -1,5 +1,5 @@
 name: fakegreen
-description: Catch AI coding agents faking a green build: skipped or deleted tests, weakened asserts, silenced linters, neutered CI.
+description: "Catch AI coding agents faking a green build: skipped or deleted tests, weakened asserts, silenced linters, neutered CI."
 author: Joshua Almeida
 branding:
   icon: alert-triangle
