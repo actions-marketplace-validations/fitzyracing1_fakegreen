@@ -367,6 +367,26 @@ No. It never makes a network call. It shells out to `git` and nothing else.
   during the session.
 - `fakegreen-ignore-file` is only honoured when it appears in the diff's added lines or context.
 
+## Support & services
+
+fakegreen is MIT-licensed and the CLI, hooks, pre-commit hook and GitHub Action will stay free. I'm Joshua Almeida, and I
+build and maintain it on my own. If it saves you from merging a "fixed" test suite that was really a deleted one, here
+are three ways to help:
+
+**Sponsor the project.** [GitHub Sponsors](https://github.com/sponsors/fitzyracing1) pays for the time I spend on new
+rules, new languages and false-positive fixes. Every sponsorship helps, small ones included.
+
+**fakegreen for Teams (early access waitlist).** I'm looking into a hosted version for teams running AI coding agents
+across many repos. The plan is a GitHub App that posts findings as PR comments and check runs, one shared policy for the
+whole org, and a history of fake-green incidents grouped by agent and repo. **Nothing is built yet.** If your team would
+use it, [join the waitlist](https://fitzyracing1.github.io/fakegreen/#teams) and tell me what you'd need, because that
+decides what gets built.
+
+**Consulting & custom rules.** If your team is rolling out Claude Code, Codex, Gemini CLI, Cursor or Aider, I can
+help you write fakegreen rules for your own codebase, test conventions and CI setup, and wire up guardrails (hooks,
+pre-commit, CI gates) that agents can't quietly route around. Email
+[fitzyracing1@gmail.com](mailto:fitzyracing1@gmail.com?subject=fakegreen%20consulting).
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). New detectors need a true-positive fixture **and** a false-positive guard.

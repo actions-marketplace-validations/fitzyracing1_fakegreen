@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>fakegreen: catch AI coding agents faking a green build</title>
+<meta name="description" content="Deterministic, zero-LLM CLI that scans your agent's git diff and flags skipped or deleted tests, weakened assertions, suppressions and CI forced green. MIT licensed.">
+<style>
+  :root{--bg:#0b0f0d;--panel:#121815;--panel2:#18201c;--line:#24302a;--text:#e6ede9;--muted:#93a39a;--green:#3ddc84;--red:#ff5c5c;--amber:#f5b942;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55}
+  a{color:var(--green);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
+  .logo{font-family:var(--mono);font-weight:700;font-size:18px;color:var(--text)}
+  .logo b{color:var(--green)} .logo s{color:var(--red);text-decoration-thickness:2px}
+  nav .links a{color:var(--muted);margin-left:22px;font-size:14px} nav .links a:hover{color:var(--text)}
+  .hero{padding:48px 0 24px;text-align:center}
+  .pill{display:inline-block;font-size:12px;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 12px;margin-bottom:18px}
+  h1{font-size:clamp(32px,5vw,52px);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
+  h1 em{font-style:normal;color:var(--green)}
+  .sub{color:var(--muted);font-size:18px;max-width:720px;margin:0 auto 28px}
+  .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .cmd{font-family:var(--mono);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 18px;font-size:16px;color:var(--text)}
+  .cmd span{color:var(--green);user-select:none}
+  .btn{display:inline-block;border-radius:10px;padding:12px 20px;font-weight:600;font-size:15px;border:1px solid var(--line);color:var(--text);background:var(--panel2)}
+  .btn.primary{background:var(--green);color:#06210f;border-color:var(--green)}
+  .btn:hover{text-decoration:none;filter:brightness(1.08)}
+  .demo{margin:40px auto 0;max-width:860px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#000;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .demo img{display:block;width:100%;height:auto}
+  .facts{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;color:var(--muted);font-size:14px;margin:22px 0 0}
+  .facts b{color:var(--text);font-weight:600}
+  section{padding:56px 0;border-top:1px solid var(--line)}
+  h2{font-size:28px;margin:0 0 8px;letter-spacing:-.01em}
+  .lead{color:var(--muted);margin:0 0 28px;max-width:720px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .card h3{margin:0 0 6px;font-size:16px}
+  .card p{margin:0;color:var(--muted);font-size:14px}
+  code{font-family:var(--mono);font-size:.92em;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+  pre{font-family:var(--mono);font-size:13px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;overflow:auto;margin:0;color:#cfd8d3}
+  .hi{color:var(--red);font-weight:700} .me{color:var(--amber);font-weight:700} .ok{color:var(--green)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px} @media(max-width:800px){.two{grid-template-columns:1fr}}
+  .teams{background:linear-gradient(180deg,rgba(61,220,132,.06),transparent 60%);}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#06210f;background:var(--amber);border-radius:6px;padding:2px 8px;margin-left:8px;vertical-align:middle}
+  ul.check{list-style:none;padding:0;margin:0 0 20px} ul.check li{padding:6px 0 6px 26px;position:relative;color:#cfd8d3}
+  ul.check li:before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+  form{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
+  input,select,textarea{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit;font-size:14px;margin-bottom:14px}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--green);outline-offset:1px;border-color:transparent}
+  form .btn{width:100%;cursor:pointer;font:inherit;font-weight:700}
+  .note{font-size:12px;color:var(--muted);margin:10px 0 0}
+    footer{border-top:1px solid var(--line);padding:28px 0 48px;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo">fake<s>green</s><b>✓</b></div>
+    <div class="links">
+      <a href="#rules">What it catches</a>
+      <a href="#install">Install</a>
+      <a href="#teams">Teams</a>
+      <a href="https://github.com/fitzyracing1/fakegreen">GitHub</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="pill">MIT licensed · deterministic · no LLM · no API key</div>
+    <h1>Your agent said <em>"All tests pass ✅"</em>.<br>Did it delete them first?</h1>
+    <p class="sub">fakegreen scans the git diff and flags every way an AI coding agent faked a green build: skipped or deleted tests, weakened assertions, new suppressions, test-env special-casing, swallowed errors, and CI forced green with <code>|| true</code>.</p>
+    <div class="cta">
+      <div class="cmd"><span>$ </span>npx fakegreen</div>
+      <a class="btn" href="https://github.com/fitzyracing1/fakegreen">View on GitHub</a>
+      <a class="btn primary" href="#teams">Join the Teams waitlist</a>
+    </div>
+    <div class="demo"><img src="./demo.gif" alt="fakegreen catching a fake-green agent commit in the terminal" width="860"></div>
+    <div class="facts">
+      <span><b>22</b> rules</span>
+      <span><b>JS/TS · Python · Go · Rust · Java</b></span>
+      <span><b>Zero</b> runtime dependencies</span>
+      <span>Never sends your code anywhere</span>
+    </div>
+  </header>
+
+  <section id="rules">
+    <h2>What it catches</h2>
+    <p class="lead">It looks only at added and removed lines, lexes out comments and strings, and ignores pure moves and renames. Same diff in, same answer out, every time.</p>
+    <div class="grid">
+      <div class="card"><h3>Tests skipped, focused or deleted</h3><p><code>.skip</code>, <code>xit</code>, <code>@pytest.mark.skip</code>, <code>t.Skip()</code>, <code>#[ignore]</code>, <code>@Disabled</code>, <code>.only</code>, deleted test files, dropped test counts.</p></div>
+      <div class="card"><h3>Assertions weakened</h3><p><code>toBe(42)</code> → <code>toBeDefined()</code>, assertions removed, <code>expect(true).toBe(true)</code>, <code>assert True</code>.</p></div>
+      <div class="card"><h3>Checkers silenced</h3><p><code>@ts-ignore</code>, <code>eslint-disable</code>, <code># type: ignore</code>, <code>noqa</code>, <code>//nolint</code>, <code>#[allow]</code>, coverage exclusions, weakened tsconfig/mypy.</p></div>
+      <div class="card"><h3>CI forced green</h3><p><code>|| true</code>, <code>continue-on-error</code>, <code>allow_failure</code>, removed or disabled test steps, neutered test scripts, lowered coverage thresholds.</p></div>
+      <div class="card"><h3>Test-env special-casing</h3><p>Production code branching on <code>NODE_ENV === 'test'</code>, <code>JEST_WORKER_ID</code>, <code>"pytest" in sys.modules</code>, <code>cfg!(test)</code>.</p></div>
+      <div class="card"><h3>Swallowed errors</h3><p>New empty <code>catch {}</code>, <code>except: pass</code>, <code>.catch(() =&gt; {})</code>, <code>if err != nil {}</code>.</p></div>
+    </div>
+  </section>
+
+  <section id="install">
+    <h2>Block the agent before it says "done"</h2>
+    <p class="lead">Hook fakegreen into your agent's end-of-turn event. When it finds something, the agent is told exactly what it faked and is asked to fix it or explain why.</p>
+    <div class="two">
+<pre><span class="ok"># agent end-of-turn hooks</span>
+npx fakegreen install claude
+npx fakegreen install codex
+npx fakegreen install gemini
+
+<span class="ok"># everywhere else</span>
+npx fakegreen install pre-commit
+npx fakegreen --base origin/main --sarif &gt; fg.sarif</pre>
+<pre><span class="ok"># .github/workflows/fakegreen.yml</span>
+- uses: actions/checkout@v4
+  with: { fetch-depth: 0 }
+- uses: fitzyracing1/fakegreen@v0.1.1
+  with:
+    fail-on: high
+
+<span class="hi">HIGH</span>  test/cart.test.ts:9  test-skipped
+<span class="me">MED</span>   src/cart.ts:4  suppression-added</pre>
+    </div>
+  </section>
+
+  <section id="teams" class="teams">
+    <h2>fakegreen for Teams <span class="tag">Early access</span></h2>
+    <p class="lead">The CLI, hooks and GitHub Action stay free and open source. I'm considering a hosted version for teams running AI agents across many repos. <b>It isn't built yet.</b> If enough teams want it, it gets built with the first ones on the waitlist.</p>
+    <div class="two">
+      <div>
+        <ul class="check">
+          <li>GitHub App: zero-config check runs and one PR comment on every repo in your org</li>
+          <li>One shared org-wide policy, with locked rules that agents can't loosen</li>
+          <li>Dashboard of fake-pass incidents by agent, repo and rule, waivers included</li>
+          <li>Audit export (CSV/JSON) for reviews and compliance</li>
+          <li>Custom rules for your test helpers and CI conventions</li>
+          <li>Priority support</li>
+        </ul>
+        <p class="note">Rolling out coding agents and want help now? I also do setup and custom-rule work. Email <a href="mailto:fitzyracing1@gmail.com?subject=fakegreen%20consulting">fitzyracing1@gmail.com</a>.</p>
+        <p class="note">Like the project? <a href="https://github.com/sponsors/fitzyracing1">Sponsor it on GitHub</a>.</p>
+      </div>
+      <!-- Waitlist: no backend yet, so this builds a prefilled email (mailto) with the visitor's answers.
+           Later: swap this <form> for a Tally embed (https://tally.so) or point it at a Formspree endpoint. -->
+      <form id="waitlist" action="mailto:fitzyracing1@gmail.com?subject=fakegreen%20for%20Teams%20waitlist&amp;body=Hi%20Joshua%2C%0D%0A%0D%0AI%27d%20like%20to%20join%20the%20fakegreen%20for%20Teams%20waitlist.%0D%0A%0D%0ATeam%20name%3A%20%0D%0ATeam%20size%3A%20%0D%0AWhich%20AI%20coding%20agents%20we%20use%3A%20%0D%0AWhat%20would%20make%20it%20worth%20paying%20for%20(optional)%3A%20%0D%0A" method="post" enctype="text/plain">
+        <label for="team">Team name</label>
+        <input id="team" name="team" placeholder="Acme Platform Team">
+        <label for="size">Team size</label>
+        <select id="size" name="team_size">
+          <option>1–4</option><option>5–20</option><option>21–100</option><option>100+</option>
+        </select>
+        <label for="agents">Which AI coding agents does your team use?</label>
+        <input id="agents" name="agents" placeholder="Claude Code, Codex, Cursor, …">
+        <label for="need">What would make this worth paying for?</label>
+        <textarea id="need" name="need" rows="3" placeholder="Optional, but it shapes what gets built"></textarea>
+        <button class="btn primary" type="submit">Join the waitlist</button>
+        <p class="note">This opens a prefilled email to <a href="mailto:fitzyracing1@gmail.com?subject=fakegreen%20for%20Teams%20waitlist&amp;body=Hi%20Joshua%2C%0D%0A%0D%0AI%27d%20like%20to%20join%20the%20fakegreen%20for%20Teams%20waitlist.%0D%0A%0D%0ATeam%20name%3A%20%0D%0ATeam%20size%3A%20%0D%0AWhich%20AI%20coding%20agents%20we%20use%3A%20%0D%0AWhat%20would%20make%20it%20worth%20paying%20for%20(optional)%3A%20%0D%0A">fitzyracing1@gmail.com</a>. I'll only email you about fakegreen for Teams.</p>
+      </form>
+      <script>
+        document.getElementById('waitlist').addEventListener('submit', function (e) {
+          e.preventDefault();
+          var v = function (id) { return document.getElementById(id).value.trim(); };
+          var body = "Hi Joshua,\r\n\r\nI'd like to join the fakegreen for Teams waitlist.\r\n\r\n" +
+            "Team name: " + v('team') + "\r\n" +
+            "Team size: " + v('size') + "\r\n" +
+            "Which AI coding agents we use: " + v('agents') + "\r\n" +
+            "What would make it worth paying for: " + v('need') + "\r\n";
+          window.location.href = "mailto:fitzyracing1@gmail.com?subject=" +
+            encodeURIComponent("fakegreen for Teams waitlist") + "&body=" + encodeURIComponent(body);
+        });
+      </script>
+    </div>
+  </section>
+
+  <footer>
+    <span>fakegreen · MIT © 2026 Joshua Almeida</span>
+    <span><a href="https://github.com/fitzyracing1/fakegreen">GitHub</a> · <a href="https://www.npmjs.com/package/fakegreen">npm</a> · <a href="https://github.com/marketplace/actions/fakegreen">Action</a> · <a href="https://github.com/sponsors/fitzyracing1">Sponsor</a></span>
+  </footer>
+</div>
+</body>
+</html>
