@@ -1,5 +1,5 @@
 name: fakegreen
-description: Flag every way an AI coding agent faked a green build in a pull request (skipped/deleted tests, weakened assertions, suppressions, neutered CI).
+description: Catch AI coding agents faking a green build: skipped or deleted tests, weakened asserts, silenced linters, neutered CI.
 author: Joshua Almeida
 branding:
   icon: alert-triangle
