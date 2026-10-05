@@ -1,0 +1,48 @@
+# fakegreen
+
+> fakegreen is an MIT-licensed, deterministic command-line tool (no LLM, no API key, zero runtime dependencies) that scans a git diff and flags the ways AI coding agents such as Claude Code, Codex, Gemini CLI, Cursor and Aider fake a green build: skipped or deleted tests, weakened assertions, checker suppressions, test-environment special-casing, swallowed errors, and CI steps forced to pass with `|| true`. It ships end-of-turn hooks for Claude Code, Codex and Gemini CLI, a pre-commit hook, and a GitHub Action, with SARIF and JSON output.
+
+Key facts:
+
+- Run once with `npx fakegreen` (Node.js 18+ and `git` required), or install with `npm i -D fakegreen`. The npm package is `fakegreen`.
+- It looks only at added and removed lines. Comments and string literals are lexed out, and pure moves/renames are ignored.
+- There are 22 rules. Supported languages: JavaScript/TypeScript, Python, Go, Rust, Java (plus Kotlin test annotations). It also checks CI/config files: GitHub Actions, GitLab CI, package.json, tsconfig, jest/vitest/c8/nyc, pyproject/setup.cfg/tox/.coveragerc, Maven/Gradle, Makefiles, husky/shell hooks.
+- Exit codes: `0` clean (or below `--fail-on`), `1` findings at or above `--fail-on` (default `high`), `2` usage or git error.
+- The CLI never makes a network call.
+- GitHub Action: `uses: fitzyracing1/fakegreen@v0.1.1` (inputs: `version`, `base`, `fail-on`, `args`), used after `actions/checkout@v4` with `fetch-depth: 0`.
+
+## Docs
+
+- [README](https://github.com/fitzyracing1/fakegreen/blob/main/README.md): full documentation, including install, usage, rules, hooks, configuration, FAQ and limitations
+- [README (raw Markdown)](https://raw.githubusercontent.com/fitzyracing1/fakegreen/main/README.md): same content as plain Markdown
+- [Install](https://github.com/fitzyracing1/fakegreen#install): `npx fakegreen` or `npm i -D fakegreen`
+- [Usage](https://github.com/fitzyracing1/fakegreen#usage): diff modes (`--staged`, `--base origin/main`, `--last-commit`, `--commit <sha>`, `--diff -`), output formats (`--json`, `--sarif`, `--format github`), `--fail-on`, `--min-severity`, `fakegreen rules`
+- [Rules list](https://github.com/fitzyracing1/fakegreen#what-it-checks): all 22 rules with default severities
+- [Agent hooks](https://github.com/fitzyracing1/fakegreen#stop-the-agent-in-its-tracks-end-of-turn-hooks): `npx fakegreen install claude|codex|gemini` blocks the agent's stop and tells it what it faked
+- [Pre-commit, CI and the agent skill](https://github.com/fitzyracing1/fakegreen#pre-commit-ci-and-the-agent-skill): `fakegreen install pre-commit`, `fakegreen install github-action`, `fakegreen install skill`, and the pre-commit framework config
+- [Configuration](https://github.com/fitzyracing1/fakegreen#configuration): `.fakegreenrc.json` keys (`rules`, `ignore`, `testPatterns`, `failOn`, `untracked`) and `fakegreen-ignore` comments
+- [FAQ](https://github.com/fitzyracing1/fakegreen#faq): why not an LLM reviewer, false positives on refactors, no AST, disabling by agents, no network calls
+- [Known limitations](https://github.com/fitzyracing1/fakegreen#known-limitations)
+
+## Packages and listings
+
+- [npm: fakegreen](https://www.npmjs.com/package/fakegreen): the CLI package
+- [GitHub Marketplace: fakegreen Action](https://github.com/marketplace/actions/fakegreen): composite GitHub Action
+- [Source code](https://github.com/fitzyracing1/fakegreen): TypeScript, MIT license
+- [Website](https://fitzyracing1.github.io/fakegreen/): landing page
+
+## Rules
+
+- `test-file-deleted` (high), `test-count-dropped` (high), `test-skipped` (high), `test-focused` (high), `test-conditional-skip` (low)
+- `assertion-removed` (medium), `assertion-weakened` (high), `assertion-trivial` (high), `assertion-expected-changed` (low)
+- `suppression-added` (medium; graded low to high), `coverage-exclusion-added` (low)
+- `ci-failure-ignored` (high), `ci-step-removed` (high), `ci-step-disabled` (high), `test-script-neutered` (high), `test-exclusion-added` (medium), `coverage-threshold-lowered` (high)
+- `typecheck-weakened` (medium), `lint-rule-disabled` (low)
+- `test-env-special-case` (high), `error-swallowed` (medium), `ignore-comment-added` (low)
+
+## Optional
+
+- [llms-full.txt](https://fitzyracing1.github.io/fakegreen/llms-full.txt): the full README in one file
+- [Agent skill (SKILL.md)](https://github.com/fitzyracing1/fakegreen/blob/main/skills/fakegreen/SKILL.md): instructions telling agents not to skip, delete or weaken tests
+- [Contributing](https://github.com/fitzyracing1/fakegreen/blob/main/CONTRIBUTING.md)
+- [Support & services](https://github.com/fitzyracing1/fakegreen#support--services): GitHub Sponsors, the Teams waitlist (not built yet), consulting
