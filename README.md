@@ -418,3 +418,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). New detectors need a true-positive fixtu
 ## License
 
 [MIT](LICENSE) © 2026 Joshua Almeida
+
+## Documentation
+
+- In-repo docs: [docs/](docs/index.md)
+- Wiki: [https://github.com/fitzyracing1/fakegreen/wiki](https://github.com/fitzyracing1/fakegreen/wiki)
