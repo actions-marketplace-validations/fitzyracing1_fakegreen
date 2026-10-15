@@ -1,7 +1,7 @@
 {
   "name": "fakegreen",
   "version": "0.1.0",
-  "description": "One command scans your agent's diff and flags every way it faked a green build. Deterministic, zero-LLM, no API key.",
+  "description": "fakegreen catches AI coding agents (Claude Code, Codex, Gemini CLI) faking a green build: skipped or deleted tests, weakened assertions, CI forced green. Deterministic, zero-LLM, no API key.",
   "keywords": [
     "ai",
     "agents",
@@ -25,11 +25,16 @@
     "static-analysis",
     "code-quality",
     "code-review",
-    "llm"
+    "llm",
+    "fakegreen",
+    "fake-tests",
+    "ai-coding-agent",
+    "green-build",
+    "test-skipping"
   ],
   "license": "MIT",
   "author": "Joshua Almeida",
-  "homepage": "https://github.com/fitzyracing1/fakegreen#readme",
+  "homepage": "https://fitzyracing1.github.io/fakegreen/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fitzyracing1/fakegreen.git"
