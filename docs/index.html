@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>fakegreen: Detect AI Coding Agents Faking Passing Tests</title>
-<meta name="description" content="Free open-source CLI and GitHub Action that catches Claude Code, Codex and Gemini CLI faking passing tests: skipped tests, weakened assertions, CI forced green.">
+<title>fakegreen — Catch AI Coding Agents Faking Tests (Claude Code, Codex)</title>
+<meta name="description" content="fakegreen is a free, open-source CLI and GitHub Action that catches AI coding agents faking a green build: skipped or deleted tests, weakened assertions, CI forced green.">
 <link rel="canonical" href="https://fitzyracing1.github.io/fakegreen/">
 <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#0b0f0d">
@@ -12,8 +12,8 @@
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="fakegreen">
-<meta property="og:title" content="fakegreen: Detect AI Coding Agents Faking Passing Tests">
-<meta property="og:description" content="Free open-source CLI and GitHub Action that catches Claude Code, Codex and Gemini CLI faking passing tests: skipped tests, weakened assertions, CI forced green.">
+<meta property="og:title" content="fakegreen — Catch AI Coding Agents Faking Tests (Claude Code, Codex)">
+<meta property="og:description" content="fakegreen is a free, open-source CLI and GitHub Action that catches AI coding agents faking a green build: skipped or deleted tests, weakened assertions, CI forced green.">
 <meta property="og:url" content="https://fitzyracing1.github.io/fakegreen/">
 <meta property="og:image" content="https://fitzyracing1.github.io/fakegreen/og.png">
 <meta property="og:image:width" content="1200">
@@ -21,8 +21,8 @@
 <meta property="og:image:alt" content="fakegreen: catch AI coding agents faking passing tests. npx fakegreen">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="fakegreen: Detect AI Coding Agents Faking Passing Tests">
-<meta name="twitter:description" content="Free open-source CLI and GitHub Action that catches Claude Code, Codex and Gemini CLI faking passing tests: skipped tests, weakened assertions, CI forced green.">
+<meta name="twitter:title" content="fakegreen — Catch AI Coding Agents Faking Tests (Claude Code, Codex)">
+<meta name="twitter:description" content="fakegreen is a free, open-source CLI and GitHub Action that catches AI coding agents faking a green build: skipped or deleted tests, weakened assertions, CI forced green.">
 <meta name="twitter:image" content="https://fitzyracing1.github.io/fakegreen/og.png">
 <meta name="twitter:image:alt" content="fakegreen: catch AI coding agents faking passing tests. npx fakegreen">
 <script type="application/ld+json">
@@ -40,6 +40,9 @@
    "operatingSystem": "Linux, macOS, Windows (requires Node.js 18+ and git)",
    "softwareVersion": "0.1.0",
    "license": "https://opensource.org/licenses/MIT",
+   "codeRepository": "https://github.com/fitzyracing1/fakegreen",
+   "programmingLanguage": "TypeScript",
+   "keywords": "fakegreen, fakegreen AI, catch AI agents faking tests, AI coding agent fake passing tests, Claude Code skipped tests detector, green build",
    "image": "https://fitzyracing1.github.io/fakegreen/og.png",
    "screenshot": "https://fitzyracing1.github.io/fakegreen/demo.png",
    "downloadUrl": "https://www.npmjs.com/package/fakegreen",
@@ -150,12 +153,12 @@
   <header class="hero">
     <div class="pill">MIT licensed · deterministic · no LLM · no API key</div>
     <p class="kicker">Your agent said <em>"All tests pass ✅"</em>. Did it delete them first?</p>
-    <h1>Catch AI coding agents <em>faking passing tests</em></h1>
-    <p class="sub">fakegreen scans the git diff from Claude Code, Codex, Gemini CLI, Cursor or Aider and flags every way the agent faked a green build: skipped or deleted tests, weakened assertions, new suppressions, test-env special-casing, swallowed errors, and CI forced green with <code>|| true</code>.</p>
+    <h1>fakegreen: catch AI coding agents <em>faking passing tests</em></h1>
+    <p class="sub"><b>fakegreen</b> is an open-source AI coding agent checker: if your AI coding agent reports fake passing tests, fakegreen catches it. Think of it as a Claude Code skipped-tests detector that also covers Codex and other agents. It scans the git diff from Claude Code, Codex, Gemini CLI, Cursor or Aider and flags every way the agent faked a green build: skipped or deleted tests, weakened assertions, new suppressions, test-env special-casing, swallowed errors, and CI forced green with <code>|| true</code>.</p>
     <div class="cta">
       <div class="cmd"><span>$ </span>npx fakegreen</div>
       <a class="btn" href="https://github.com/fitzyracing1/fakegreen">View on GitHub</a>
-      <a class="btn primary" href="#teams">Join the Teams waitlist</a>
+      <a class="btn primary" href="#teams">Teams (coming soon): get notified</a>
     </div>
     <figure class="demo"><img src="./demo.gif" alt="Terminal recording: fakegreen flags an AI agent commit that skipped a test, weakened an assertion, deleted a test file, added @ts-ignore and appended || true to CI" width="944" height="1053"></figure>
     <div class="facts">
@@ -216,8 +219,8 @@ npx fakegreen --base origin/main --sarif &gt; fg.sarif</pre>
   </section>
 
   <section id="teams" class="teams">
-    <h2>fakegreen for Teams <span class="tag">Early access</span></h2>
-    <p class="lead">The CLI, hooks and GitHub Action stay free and open source. I'm considering a hosted version for teams running AI agents across many repos. <b>It isn't built yet.</b> If enough teams want it, it gets built with the first ones on the waitlist.</p>
+    <h2>fakegreen for Teams <span class="tag">Coming soon</span></h2>
+    <p class="lead">The CLI, hooks and GitHub Action stay free and open source. I'm considering a hosted version for teams running AI agents across many repos. <b>It isn't built yet.</b> If enough teams want it, I'll build it, and the people on the notify list hear first.</p>
     <div class="two">
       <div>
         <ul class="check">
@@ -244,7 +247,7 @@ npx fakegreen --base origin/main --sarif &gt; fg.sarif</pre>
         <input id="agents" name="agents" placeholder="Claude Code, Codex, Cursor, …">
         <label for="need">What would make this worth paying for?</label>
         <textarea id="need" name="need" rows="3" placeholder="Optional, but it shapes what gets built"></textarea>
-        <button class="btn primary" type="submit">Join the waitlist</button>
+        <button class="btn primary" type="submit">Get notified</button>
         <p class="note">This opens a prefilled email to <a href="mailto:fitzyracing1@gmail.com?subject=fakegreen%20for%20Teams%20waitlist&amp;body=Hi%20Joshua%2C%0D%0A%0D%0AI%27d%20like%20to%20join%20the%20fakegreen%20for%20Teams%20waitlist.%0D%0A%0D%0ATeam%20name%3A%20%0D%0ATeam%20size%3A%20%0D%0AWhich%20AI%20coding%20agents%20we%20use%3A%20%0D%0AWhat%20would%20make%20it%20worth%20paying%20for%20(optional)%3A%20%0D%0A">fitzyracing1@gmail.com</a>. I'll only email you about fakegreen for Teams.</p>
       </form>
       <script>

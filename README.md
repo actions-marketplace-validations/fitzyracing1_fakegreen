@@ -4,7 +4,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Node.js](https://img.shields.io/node/v/fakegreen.svg)](https://nodejs.org)
 
-**One command scans your agent's diff and flags every way it faked a green build.**
+**fakegreen catches AI coding agents faking tests.** One command scans your agent's diff (Claude Code, Codex, Gemini CLI, Cursor, Aider) and flags every way it faked a green build: skipped or deleted tests, weakened assertions, CI forced green.
+
+Website: https://fitzyracing1.github.io/fakegreen/
 
 ### Who it's for
 
